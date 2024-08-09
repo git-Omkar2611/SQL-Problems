@@ -1,0 +1,11 @@
+Step 1,,Step 2,,Step 3,,"cte1_team1 as 
+(
+select team_1 from icc_world_cup
+)",,cte2_team2 as (select distinct team_2 from icc_world_cup),,cte3_merged as (select team_1 from cte1_team1 union all select team_2 from cte2_team2),,,,,,,,team_1,,team_2,,team_1,,India,,Aus,,India,,SL,,Eng,,SL,,SA,,India,,SA,,Eng,,NZ,,Eng,,Aus,,SL,,Aus,,,,,,Aus,,,,,,Eng,,,,,,India,,,,,,NZ,,,,,,SL,,,,,,,,Step 4,,,Step 5,,,"cte4_matches_played as (
+select team_1 , count(team_1) as matches_played from cte3_merged
+group by team_1",,,"select a.team_1 , SUM(case when i.winner = a.team_1 then 1 ELSE 0 END) as no_of_wins ,
+SUM(case when i.winner != a.team_1 THEN 1 ELSE 0 END) as no_of_losses
+from cte4_matches_played a
+left join icc_world_cup i
+on (a.team_1 = i.team_1) or (a.team_1 = i.team_2)
+group by a.team_1",,,,,,,,,team_1,matches_played,,team_1,matches_played,no_of_wins,no_of_lossesAus,2,,Aus,2,1,1Eng,2,,Eng,2,1,1India,2,,India,2,2,0NZ,1,,NZ,1,1,0SA,1,,SA,1,0,1SL,2,,SL,2,0,2
